@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 0.5rem;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            margin: 0.25rem 0.5rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+        button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var countryButtons = document.querySelectorAll('.country-button');
+            countryButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    getCountryDetails(this.dataset.country);
+                });
+            });
+        });
+
+        function getCountryDetails(countryName) {
+            fetch('https://restcountries.com/v3.1/name/' + countryName)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var country = data[0];
+                    document.getElementById('countryDetails').innerHTML = 
+                        'Name: ' + country.name.common + '<br>' +
+                        'Capital: ' + country.capital[0] + '<br>' +
+                        'Region: ' + country.region + '<br>' +
+                        'Subregion: ' + country.subregion + '<br>' +
+                        'Population: ' + country.population;
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>American Countries</h1>
+    <ul>
+        <li><button class="country-button" data-country="Canada">Canada</button></li>
+        <li><button class="country-button" data-country="United States">United States</button></li>
+        <li><button class="country-button" data-country="Mexico">Mexico</button></li>
+        <li><button class="country-button" data-country="Nepal">Nepal</button></li>
+    </ul>
+    <div id="countryDetails"></div>
+</body>
+</html>

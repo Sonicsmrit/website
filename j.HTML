@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            var usa = { lat: 37.0902, lng: -95.7129 }; // USA coordinates
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: usa
+            });
+
+            var statesData = {
+                "California": {
+                    lat: 36.7783,
+                    lng: -119.4179,
+                    description: "California is a state on the west coast of the United States, famous for its tech industry in Silicon Valley, beautiful beaches, and Hollywood entertainment industry."
+                },
+                "Texas": {
+                    lat: 31.9686,
+                    lng: -99.9018,
+                    description: "Texas is the second largest state in the United States by both area and population."
+                },
+                "Florida": {
+                    lat: 27.9944,
+                    lng: -81.7603,
+                    description: "Florida is the southernmost contiguous state in the United States, known for its tropical climate, diverse wildlife, and plentiful beaches."
+                }
+                // Add more states with their coordinates and descriptions here
+            };
+
+            for (var state in statesData) {
+                var marker = new google.maps.Marker({
+                    position: { lat: statesData[state].lat, lng: statesData[state].lng },
+                    map: map,
+                    title: state
+                });
+
+                var infoWindow = new google.maps.InfoWindow();
+
+                marker.addListener('click', function () {
+                    var stateName = this.getTitle();
+                    var stateDescription = statesData[stateName].description;
+                    infoWindow.setContent('<strong>' + stateName + '</strong><br>' + stateDescription);
+                    infoWindow.open(map, this);
+                });
+            }
+        }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_ACTUAL_API_KEY&callback=initMap">
+    </script>
+</body>
+</html>
