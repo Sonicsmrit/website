@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(4, 4, 4);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: rgb(253, 247, 247);
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        li {
+            margin: 10px;
+        }
+
+        .country-button {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            background-color: #ff6f61; /* Coral color */
+            border: 2px solid #e74c3c; /* Darker coral for border */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .country-button:hover {
+            background-color: #e74c3c; /* Darker coral on hover */
+        }
+
+        #countryDetails {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Enable scrolling if content is too long */
+            display: none; /* Initially hide the details */
+        }
+
+        #countryDetails.active {
+            display: block; /* Show the details when active class is present */
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var countryButtons = document.querySelectorAll('.country-button');
+            var countryDetails = document.getElementById('countryDetails');
+
+            countryButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    getCountryDetails(this.dataset.country);
+                    countryDetails.classList.add('active'); // Add the active class to show details
+                });
+            });
+
+            countryDetails.addEventListener('click', function() {
+                this.classList.remove('active'); // Remove the active class to hide details when clicked
+            });
+        });
+
+        function getCountryDetails(countryName) {
+            fetch('https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=extracts&format=json&exintro=&titles=' + countryName)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var pages = data.query.pages;
+                    var pageId = Object.keys(pages)[0];
+                    var page = pages[pageId];
+                    document.getElementById('countryDetails').innerHTML = page.extract;
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>North American Countries</h1>
+    <ul>
+        <!-- Add the names of the 23 North American countries here -->
+        <li><button class="country-button" data-country="Canada">Canada</button></li>
+        <li><button class="country-button" data-country="United States">United States</button></li>
+        <li><button class="country-button" data-country="Mexico">Mexico</button></li>
+        <li><button class="country-button" data-country="Guatemala">Guatemala</button></li>
+        <li><button class="country-button" data-country="Belize">Belize</button></li>
+        <li><button class="country-button" data-country="El Salvador">El Salvador</button></li>
+        <li><button class="country-button" data-country="Honduras">Honduras</button></li>
+        <li><button class="country-button" data-country="Nicaragua">Nicaragua</button></li>
+        <li><button class="country-button" data-country="Costa Rica">Costa Rica</button></li>
+        <li><button class="country-button" data-country="Panama">Panama</button></li>
+        <li><button class="country-button" data-country="Cuba">Cuba</button></li>
+        <li><button class="country-button" data-country="Haiti">Haiti</button></li>
+        <li><button class="country-button" data-country="Dominican Republic">Dominican Republic</button></li>
+        <li><button class="country-button" data-country="Jamaica">Jamaica</button></li>
+        <li><button class="country-button" data-country="Trinidad and Tobago">Trinidad and Tobago</button></li>
+        <li><button class="country-button" data-country="Barbados">Barbados</button></li>
+        <li><button class="country-button" data-country="Bahamas">Bahamas</button></li>
+        <li><button class="country-button" data-country="Saint Lucia">Saint Lucia</button></li>
+        <li><button class="country-button" data-country="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</button></li>
+        <li><button class="country-button" data-country="Grenada">Grenada</button></li>
+        <li><button class="country-button" data-country="Antigua and Barbuda">Antigua and Barbuda</button></li>
+        <li><button class="country-button" data-country="Dominica">Dominica</button></li>
+        <li><button class="country-button" data-country="Saint Kitts and Nevis">Saint Kitts and Nevis</button></li>
+        <li><button class="country-button" data-country="Bermuda">Bermuda</button></li>
+        <li><button class="country-button" data-country="Saint Pierre and Miquelon">Saint Pierre and Miquelon</button></li>
+        <li><button class="country-button" data-country="Anguilla">Anguilla</button></li>
+        <!-- Add the remaining countries -->
+
+        <!-- ... -->
+    </ul>
+    <div id="countryDetails"></div>
+</body>
+</html>
